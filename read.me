@@ -1,0 +1,34 @@
+Descripción General
+Este ejercicio tiene como objetivo que desarrolles una aplicación web interactiva utilizando el DOM (Document Object Model) y el BOM (Browser Object Model).
+Aprenderás a manipular elementos HTML, validar formularios con JavaScript y expresiones regulares, y a trabajar con las propiedades y métodos del BOM.
+Objetivo del Ejercicio
+Construir una aplicación que permita:
+ 1. Validar un formulario utilizando JavaScript y expresiones regulares.
+ 2. Manipular elementos HTML dinámicamente mediante el DOM.
+ 3. Trabajar con el BOM para gestionar elementos del navegador como ventanas, ubicación y navegación.
+ 4. Crear una funcionalidad completa que combine los conceptos de DOM y BOM.
+
+ Requisitos
+1. Validación de Campos del Formulario
+ 1. Crea un formulario HTML con los siguientes campos:
+• Nombre: Solo permite letras y un máximo de 30 caracteres.
+• Correo Electrónico: Valida que el formato sea correcto (ejemplo: nombre@dominio.com).
+• Teléfono: Solo permite números, con un mínimo de 9 y un máximo de 15 caracteres.
+• Contraseña: Debe tener al menos una letra mayúscula, una letra minúscula y un número.
+• Confirmación de Contraseña: Debe coincidir con la contraseña.
+ 2. Valida los campos usando expresiones regulares y muestra errores personalizados debajo de cada campo si no cumplen con los criterios.
+ 3. Realiza la validación completa al enviar el formulario. Si algún campo no es válido, previene el envío del formulario con event.preventDefault().
+2. Manipulación del DOM
+ 1. Al enviar el formulario con éxito, utiliza el DOM para:
+ Crear un nuevo elemento en la página que muestre un mensaje de bienvenida personalizado (por ejemplo, "Bienvenido, [nombre]").
+ Mostrar una lista con los datos ingresados (excluyendo la contraseña).
+ 2. Añade funcionalidad dinámica:
+ Un botón para limpiar los datos ingresados y restablecer el formulario.
+ Cambiar el color de fondo de la página al hacer clic en un botón específico.
+ Ocultar o mostrar secciones de la página mediante el DOM.
+3. Uso del BOM
+ 1. Implementa funcionalidades del BOM, como:
+ Propiedad window.location: Muestra la URL actual de la página en un área del documento.
+ Método alert: Usa un alert para confirmar que el formulario se ha enviado correctamente.
+ Métodos de manejo de ventanas: Abre una nueva ventana o pestaña con información adicional al hacer clic en un enlace (por ejemplo, "Más información").
+ Temporizadores: Usa setTimeout o setInterval para mostrar un mensaje en pantalla después de 5 segundos o actualizar un reloj en tiempo real.
