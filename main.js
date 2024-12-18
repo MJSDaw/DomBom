@@ -6,6 +6,8 @@ const r_mail = document.getElementById("r-mail");
 const r_phone = document.getElementById("r-phone");
 const r_pass = document.getElementById("r-password");
 const r_c_pass = document.getElementById("r-c-password");
+const l_username = document.getElementById("l-username");
+const l_pass = document.getElementById("l-password");
 
 let usuarios = [];
 
@@ -20,6 +22,7 @@ function cambiar(objetivo){
             login.style.display = "flex";
             login.style.flexDirection = "column";
             register.style.display = "none";
+            resetForm();
             break;
     }
 }
@@ -32,20 +35,127 @@ function valRegister(){
     let cpass = r_c_pass.value;
 
     if(name === ""){
-        alert("Este campo no puede estar vacio");
+        displayError("empty", "Nombre")
         event.preventDefault();
         return;
     }
 
-    if(name.indexOf(" ") != -1){
-        alert("Solo puedes poner un nombre sin espacios.");
+    if(mail === ""){
+        displayError("empty", "Correo electrónico")
         event.preventDefault();
         return;
     }
+
+    if(phone === ""){
+        displayError("empty", "Número de teléfono")
+        event.preventDefault();
+        return;
+    }
+
+    if(pass === ""){
+        displayError("empty", "Contraseña")
+        event.preventDefault();
+        return;
+    }
+    
+    if(haveSpaces(name)){
+        displayError("space", "Nombre");
+        event.preventDefault();
+        return;
+    }
+
+    if(haveSpaces(mail)){
+        displayError("space", "Correo electrónico");
+        event.preventDefault();
+        return;
+    }
+
+    if(haveSpaces(phone)){
+        displayError("space", "Número de teléfono");
+        event.preventDefault();
+        return;
+    }
+
+    if(haveSpaces(pass)){
+        displayError("space", "Contraseña");
+        event.preventDefault();
+        return;
+    }
+    
     const pattern = new RegExp('^[A-Z]+$', 'i');
     
     if (!pattern.test(name)) {
-        alert("Solo puedes poner caracteres alfabéticos (a-z / A-Z).")
+        console.log("Solo puedes poner caracteres alfabéticos (a-z / A-Z).")
+        event.preventDefault();
         return;
     }
+
+    if(pass.length < 8 || pass.length > 16){
+        displayError("passNum");
+        event.preventDefault();
+        return;
+    }
+
+    if(pass !== cpass){
+        displayError("diffPass");
+        event.preventDefault();
+        return;
+    }
+
+    const patternNums = new RegExp("^\\d+$"); 
+
+    if (!patternNums.test(phone)) {
+        displayError("phoneNoNum");
+        event.preventDefault();
+        return;
+    }
+
+    if(phone.length != 9){
+        displayError("phoneNum");
+        event.preventDefault();
+        return;
+    }
+
+    console.log("Registrado correctamente");
+}
+
+function haveSpaces(data){
+    if(data.indexOf(" ") != -1){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function displayError(type, name=""){
+    switch (type) {
+        case "space":
+            console.log(`Error en el campo \"${name}\": No se admiten espacios en este campo.`);
+            break;
+        case "empty":
+            console.log(`Error en el campo \"${name}\": No puede estar vacío.`)
+            break;
+        case "diffPass":
+            console.log(`Error de contraseñas: Los campos no coinciden.`)
+            break;
+        case "passNum":
+            console.log(`Error de contraseña: Debe tener entre 8 y 16 caracteres.`)
+            break;
+        case "phoneNoNum":
+            console.log(`Error de Número de teléfono: Solo se admiten caracteres numéricos.`)
+            break;
+        case "phoneNum":
+            console.log(`Error de Número de teléfono: Solo se admiten números +34 de 9 dígitos.`)
+            break;
+    }
+}
+
+function resetForm(){
+    r_username.value = "";
+    r_mail.value = "";
+    r_phone.value = "";
+    r_pass.value = "";
+    r_c_pass.value = "";
+    l_username.value = "";
+    l_pass.value = "";
 }
