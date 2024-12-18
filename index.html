@@ -7,9 +7,9 @@
 </head>
 <body style="max-width: 500px;">
     <section id="login" style="display: flex; flex-direction: column;">
-        <label for="l-username">Nombre: </label><input type="text" id="l-username">
+        <label for="l-mail">Correo electrónico: </label><input type="text" id="l-mail">
         <label for="l-password">Contraseña: </label><input type="password" id="l-password">
-        <button onclick="iniciarSesion">Iniciar Sesión</button>
+        <button onclick="iniciarSesion()">Iniciar Sesión</button>
         <p>¿No tienes cuenta? <span onclick="cambiar('register')">Regístrate aquí.</span></p>
     </section>
     <section id="register" hidden>

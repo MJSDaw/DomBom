@@ -6,10 +6,10 @@ const r_mail = document.getElementById("r-mail");
 const r_phone = document.getElementById("r-phone");
 const r_pass = document.getElementById("r-password");
 const r_c_pass = document.getElementById("r-c-password");
-const l_username = document.getElementById("l-username");
+const l_mail = document.getElementById("l-mail");
 const l_pass = document.getElementById("l-password");
 
-let usuarios = [];
+let usuarios = new Map();
 
 function cambiar(objetivo){
     switch (objetivo) {
@@ -117,6 +117,7 @@ function valRegister(){
     }
 
     console.log("Registrado correctamente");
+    usuarios.set(mail, [pass, name, phone]);
 }
 
 function haveSpaces(data){
@@ -150,12 +151,21 @@ function displayError(type, name=""){
     }
 }
 
+function iniciarSesion(){
+    let mail = l_mail.value;
+    let pass = l_pass.value;
+
+    if(usuarios.has(mail) && usuarios.get(mail)[0] === pass){
+        console.log('Inicio de sesion correcto');
+    }
+}
+
 function resetForm(){
     r_username.value = "";
     r_mail.value = "";
     r_phone.value = "";
     r_pass.value = "";
     r_c_pass.value = "";
-    l_username.value = "";
+    l_mail.value = "";
     l_pass.value = "";
 }
