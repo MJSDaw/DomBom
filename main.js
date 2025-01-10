@@ -9,8 +9,6 @@ const r_c_pass = document.getElementById("r-c-password");
 const l_mail = document.getElementById("l-mail");
 const l_pass = document.getElementById("l-password");
 
-let usuarios = new Map();
-
 function cambiar(objetivo){
     switch (objetivo) {
         case "register":
@@ -85,19 +83,25 @@ function valRegister(){
     const pattern = new RegExp('^[A-Z]+$', 'i');
     
     if (!pattern.test(name)) {
-        console.log("Solo puedes poner caracteres alfabéticos (a-z / A-Z).")
+        displayError("numName", "Nombre")
+        event.preventDefault();
+        return;
+    }
+
+    if(name.length > 30){
+        displayError("maxCharsName", "Nombre");
         event.preventDefault();
         return;
     }
 
     if(pass.length < 8 || pass.length > 16){
-        displayError("passNum");
+        displayError("passNum", "Contraseña");
         event.preventDefault();
         return;
     }
 
     if(pass !== cpass){
-        displayError("diffPass");
+        displayError("diffPass", "Contraseñas");
         event.preventDefault();
         return;
     }
@@ -105,19 +109,79 @@ function valRegister(){
     const patternNums = new RegExp("^\\d+$"); 
 
     if (!patternNums.test(phone)) {
-        displayError("phoneNoNum");
+        displayError("phoneNoNum", "Número de teléfono");
         event.preventDefault();
         return;
     }
 
-    if(phone.length != 9){
-        displayError("phoneNum");
+    if(phone.length < 9 || phone.length > 15){
+        displayError("phoneNum", "Número de teléfono");
         event.preventDefault();
         return;
     }
 
-    console.log("Registrado correctamente");
-    usuarios.set(mail, [pass, name, phone]);
+    const emailCheck = [
+        "gmail.com",
+        "hotmail.com",
+        "hotmail.es",
+        "yahoo.com",
+        "yahoo.es",
+        "outlook.com",
+        "outlook.es",
+        "icloud.com",
+        "live.com",
+        "protonmail.com",
+        "aol.com",
+        "zoho.com",
+        "mail.com",
+        "gmx.com"
+    ];
+
+    let checkMail = false;
+
+    emailCheck.forEach(domain => {
+        if(mail.includes("@" + domain, (mail.length - domain.length - 1))){
+            checkMail = true;
+        }
+    });
+
+    if(!checkMail){
+        displayError("mailFormat", "Correo electrónico");
+        event.preventDefault();
+        return;
+    }
+
+    const checkPass = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
+
+    if(!checkPass.test(pass)){
+        displayError("passRestrict", "Contraseña");
+        event.preventDefault();
+        return;
+    }
+
+    let user = {
+        name: name,
+        mail: mail,
+        phone: phone,
+        pass: pass
+    }
+
+    console.log(user);
+
+    fetch('userRegister.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log('Respuesta del servidor:', result);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 function haveSpaces(data){
@@ -137,21 +201,38 @@ function displayError(type, name=""){
             console.log(`Error en el campo \"${name}\": No puede estar vacío.`)
             break;
         case "diffPass":
-            console.log(`Error de contraseñas: Los campos no coinciden.`)
+            console.log(`Error de ${name}: Los campos no coinciden.`)
             break;
         case "passNum":
-            console.log(`Error de contraseña: Debe tener entre 8 y 16 caracteres.`)
+            console.log(`Error de ${name}: Debe tener entre 8 y 16 caracteres.`)
             break;
         case "phoneNoNum":
-            console.log(`Error de Número de teléfono: Solo se admiten caracteres numéricos.`)
+            console.log(`Error de ${name}: Solo se admiten caracteres numéricos.`)
             break;
         case "phoneNum":
-            console.log(`Error de Número de teléfono: Solo se admiten números +34 de 9 dígitos.`)
+            console.log(`Error de ${name}: Solo se admiten números de 9 a 15 dígitos.`)
+            break;
+        case "maxChars":
+            console.log(`Error en ${name}: Solo se admiten hasta 30 caracteres.`);
+            break;
+        case "numName":
+            console.log(`Error en ${name}: Solo se admiten caracteres alfabéticos.`);
+            break;
+        case "mailFormat":
+            console.log(`Error en ${name}: El formato no es correcto.`);
+            break;
+        case "maxCharsName":
+            console.log(`Error en ${name}: Solo se admiten hasta 30 caracteres.`)
+            break;
+        case "passRestrict":
+            console.log(`Error en ${name}: Debe tener al menos una letra mayúscula, una letra minúscula y un número.`)
             break;
     }
 }
 
 function iniciarSesion(){
+
+//actualizar
     let mail = l_mail.value;
     let pass = l_pass.value;
 
